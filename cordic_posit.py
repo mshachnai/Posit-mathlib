@@ -49,11 +49,17 @@ def cordic_itr(ang, n):
         x = x_prime
         y = y_prime
         z = z_prime
+    
+    print("\nPosit representation:")
+    print("cos of %d (in degrees) = " %ang, x)
+    print("sin of %d (in degrees) = " %ang, y)
+    print("tan of %d (in degrees) = "%ang, y/x)
+    
+    print("\nMathlib representation:")
+    print("cos of %d (in degrees) = " %ang, math.cos(math.pi/9))
+    print("sin of %d (in degrees) = " %ang, math.sin(math.pi/9))
+    print("tan of %d (in degrees) = " %ang, math.tan(math.pi/9))
 
-    print("cos of angle (in degrees) = ", x)
-    print("sin of angle (in degrees) = ", y)
-    print("tan of angle (in degrees) = ", y/x)
-   
     #verify angle is correct
     print("angle = ", math.degrees(math.atan(y/x)))
 
@@ -70,7 +76,7 @@ def cordic_itr(ang, n):
 #print("float: ", float(1 / math.sqrt(1 + 2**(-2*0))))
 
 
-cordic_itr(20, 40)
+cordic_itr(20, 50)
 
 
 
