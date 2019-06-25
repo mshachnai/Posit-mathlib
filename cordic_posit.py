@@ -88,7 +88,7 @@ def cordic_itr(ang, n):
     #verify angle is correct
     #print("angle = ", math.degrees(math.atan(y/x)))
     
-    arr1 = [ang, "%.200f" %x, "%.200f" %y_mpfr, "%.200f" %x, "%.200f" %x, "%.200f" %x, "%.200f"
+    arr1 = [ang, "%.20E" %x, "%.200f" %y_mpfr, "%.200f" %x, "%.200f" %x, "%.200f" %x, "%.200f"
             %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f"
             %x, "%.200f" %x, "%.200f" %x,]
 
