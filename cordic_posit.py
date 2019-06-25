@@ -133,7 +133,8 @@ if __name__ == '__main__':
             csvfile = csv.writer(f1)
             csvfile.writerow(fields)
 
-    cordic_itr(20, 40)
+    for i in range(361):
+        cordic_itr(i, 45)
 
     f.close()
 
