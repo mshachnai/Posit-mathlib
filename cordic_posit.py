@@ -99,10 +99,19 @@ def cordic_itr(ang, n):
             "%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f"
             %x, "%.100f" %x, "%.100f" %x,]
 
+    arr2 = [ang, "%.40E" %y, "%.200f" %sin_diff, "%.40E" %x, "%.40E" %cos_diff,
+            "%.40E" %(y/x), "%.40E" %tan_diff,
+            "%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E"
+            %x, "%.40E" %x, "%.40E" %x,]
+
     with open('posit.csv', 'a') as f:
-        #        f.write("%.200f\n" % x_mpfr) 
         csvfile = csv.writer(f)
         csvfile.writerow(arr1)
+
+    with open('posit_Expform.csv', 'a') as f1:
+        csvfile = csv.writer(f1)
+        csvfile.writerow(arr2)
+
 
 ##### Main Program #####
 
@@ -113,6 +122,10 @@ if __name__ == '__main__':
 
     with open('posit.csv', 'w') as f:
             csvfile = csv.writer(f)
+            csvfile.writerow(fields)
+
+    with open('posit_Expform.csv', 'w') as f1:
+            csvfile = csv.writer(f1)
             csvfile.writerow(fields)
 
     cordic_itr(20, 40)
