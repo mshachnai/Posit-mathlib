@@ -57,14 +57,14 @@ def cordic_itr(ang, n):
         z = z_prime
     
     print("\nPosit representation:")
-    print("cos of %d (in degrees) = %.200f" %(ang, x))
-    print("sin of %d (in degrees) = %.200f" %(ang, y))
-    print("tan of %d (in degrees) = %.200f" %(ang, y/x))
+    print("cos of %d (in degrees) = %.30f" %(ang, x))
+    print("sin of %d (in degrees) = %.30f" %(ang, y))
+    print("tan of %d (in degrees) = %.30f" %(ang, y/x))
     
     print("\nMathlib representation:")
-    print("cos of %d (in degrees) = %.200f" %(ang, math.cos(deg_to_rad(ang))))
-    print("sin of %d (in degrees) = %.200f" %(ang, math.sin(deg_to_rad(ang))))
-    print("tan of %d (in degrees) = %.200f" %(ang, math.tan(deg_to_rad(ang))))
+    print("cos of %d (in degrees) = %.30f" %(ang, math.cos(deg_to_rad(ang))))
+    print("sin of %d (in degrees) = %.30f" %(ang, math.sin(deg_to_rad(ang))))
+    print("tan of %d (in degrees) = %.30f" %(ang, math.tan(deg_to_rad(ang))))
 
     print("\nMPFR representation:")
     print("cos of %d (in degrees) = " %ang, bf.cos(deg_to_rad(ang), bf.precision(PREC)))
@@ -94,15 +94,18 @@ def cordic_itr(ang, n):
     #verify angle is correct
     #print("angle = ", math.degrees(math.atan(y/x)))
     
-    arr1 = [ang, "%.100f" %y, "%.200f" %sin_diff, "%.100f" %x, "%.100f" %cos_diff,
-            "%.100f" %(y/x), "%.100f" %tan_diff,
-            "%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f" %x,"%.100f"
-            %x, "%.100f" %x, "%.100f" %x,]
+    arr1 = [ang, "%.100f" %y, "%.100f" %sin_diff, "%.100f" %x, "%.100f" %cos_diff,
+            "%.100f" %(y/x), "%.100f" %tan_diff,#pos finished
+            "%.100f" %sin_mpfr, "%.100f" %cos_mpfr,"%.100f" %tan_mpfr] 
+            
+            #"%.100f" %x,"%.100f" %x,"%.100f"
+            #%x, "%.100f" %x, "%.100f" %x,]
 
-    arr2 = [ang, "%.40E" %y, "%.200f" %sin_diff, "%.40E" %x, "%.40E" %cos_diff,
+    arr2 = [ang, "%.40E" %y, "%.40E" %sin_diff, "%.40E" %x, "%.40E" %cos_diff,
             "%.40E" %(y/x), "%.40E" %tan_diff,
-            "%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E" %x,"%.40E"
-            %x, "%.40E" %x, "%.40E" %x,]
+            "%.40E" %sin_mpfr,"%.40E" %cos_mpfr,"%.40E" %tan_mpfr]
+            #"%.40E" %x,"%.40E" %x,"%.40E"
+            #%x, "%.40E" %x, "%.40E" %x,]
 
     with open('posit.csv', 'a') as f:
         csvfile = csv.writer(f)
@@ -116,9 +119,10 @@ def cordic_itr(ang, n):
 ##### Main Program #####
 
 if __name__ == '__main__':
-    fields = ['Angle', 'Posit-sin', 'Error', 'Posit-cos', 'Error', 'Posit-tan', 'Error', 'Float-sin',
-            'Error', 'Float-cos', 'Error', 'Float-tan', 'Error', 'Mathlib-sin',
-            'MPFR-sin']
+    fields = ['Angle', 'Posit-sin', 'Error', 'Posit-cos', 'Error', 'Posit-tan', 'Error',
+            'MPFR-sin', 'MPFR-cos', 'MPFR-tan']
+    #'Float-sin', 'Error', 'Float-cos', 'Error', 'Float-tan', 'Error', 
+    #        'Mathlib-sin', 'Mathlib-cos', 'Mathlib-tan']
 
     with open('posit.csv', 'w') as f:
             csvfile = csv.writer(f)
