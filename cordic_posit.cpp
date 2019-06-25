@@ -2,14 +2,19 @@
 
 #include <math.h>
 #include "../SoftPosit/source/include/softposit_cpp.h"
+#include "mpreal.h"
+#include "mpfr.h"
+#include "gmp.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>
 //#define M_PI
 const float R_to_D = 180 / M_PI; //radians to degrees
 const float D_to_R = M_PI / 180; //degrees to radians
+const int deci = 50;
 
 using namespace std;
+
 
 //function to return value of Ki
 posit32 val_Ki(int n){
@@ -70,7 +75,7 @@ void cordic_itr(posit32 ang, int n){
     }
     printf("\nPosit representation:\n");
     //printf("cos of %f (in degrees) = %f\n", ang, x);
-    cout << "cos of " << ang << " (in degrees) = " << setprecision(30) << x << endl;
+    cout << "cos of " << ang << " (in degrees) = " << setprecision(200) << x << endl;
     cout << "sin of " << ang << " (in degrees) = " << y << endl;
     cout << "tan of " << ang << " (in degrees) = " << y/x << endl;
     //printf("sin of %f (in degrees) = %f\n", ang, y);
@@ -89,7 +94,6 @@ void cordic_itr(posit32 ang, int n){
 
 
     
-
 }
 
 
@@ -102,12 +106,16 @@ void print_2d(float table[][2], int n){
 }
 
 int main(){
+    //default precision for all subsequent calculations
+    //mpfr::mpreal::set_precision(2);
+    //mpreal pi = 2.32;
     //cout << val_An(2) << endl;
+    //mpfr_t s;
+    //mpfr::mpreal::mpfr_init(s);
     posit32 table[50][2] = {};
     atan_table(table, 10);
     //print_2d(table, 10);
     //cout << M_PI;
-
     cordic_itr(20, 40);
 
     return 0;
