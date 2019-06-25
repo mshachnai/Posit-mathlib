@@ -88,8 +88,9 @@ def cordic_itr(ang, n):
     #verify angle is correct
     #print("angle = ", math.degrees(math.atan(y/x)))
     
-    arr1 = [ang, "%.30f" %x_mpfr, "%.200f" %y_mpfr, "%.200f" %x, "%.200f" %x, "%.200f" %x, "%.200f"
-            %x]
+    arr1 = [ang, "%.200f" %x, "%.200f" %y_mpfr, "%.200f" %x, "%.200f" %x, "%.200f" %x, "%.200f"
+            %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f" %x,"%.200f"
+            %x, "%.200f" %x, "%.200f" %x,]
 
     with open('posit.csv', 'a') as f:
         #f.write("%.200f\n" % x) 
