@@ -1,7 +1,11 @@
 #CORDIC algo to compute sine/cos/tan using IEEE floating point
 
 import math
+import csv
 
+#function to convert degrees to radians
+def deg_to_rad(angle):
+    return angle * math.pi / 180
 
 #function to return value of Ki
 def val_Ki(n):
@@ -65,14 +69,13 @@ def cordic_itr(ang, n):
 
 ##### TEST #####
 
-#k = val_Ki(1)
-#a = val_An(1)
-#table = atan_table(20)
-#print(2.0**(-5), table[2.0**(-5)], '\n')
-#print(table)
+if __name__ == '__main__':
+    cordic_itr(i, 45)
 
-cordic_itr(20, 50)
+    #for i in range(361):
+    #    cordic_itr(i, 45)
 
+#    f.close()
 
 
 
