@@ -126,9 +126,9 @@ def cordic_itr(ang, n):
     tan_diff = (tan_mpfr-tan_p) / tan_mpfr
      
     #float and mathlib output vars
-    cos_mlib = float(math.cos(ang))
-    sin_mlib = float(math.sin(ang))
-    tan_mlib = float(math.tan(ang))
+    cos_mlib = float(math.cos(deg_to_rad(ang)))
+    sin_mlib = float(math.sin(deg_to_rad(ang)))
+    tan_mlib = float(math.tan(deg_to_rad(ang)))
     
     try:
         cos_fdiff = (cos_mlib-xf) / cos_mlib
