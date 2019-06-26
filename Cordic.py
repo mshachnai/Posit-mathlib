@@ -66,7 +66,6 @@ def cordic_itr(ang, n):
     zf = float(ang)
     xf = float(1.0 / val_Anf(n))
     yf = float(0.0)
-    dif
     arctan_tablef = atan_tablef(n)
     
     #iterate cordic algorithm
@@ -81,9 +80,9 @@ def cordic_itr(ang, n):
         x_prime = x - y * di * 2**(-i)
         y_prime = y + x * di * 2**(-i)
         z_prime = z - di * rot_ang
-        xf_prime = float(xf - yf * dif * 2.0**(-i))
-        yf_prime = float(yf + xf * dif * 2.0**(-i))
-        zf_prime = float(zf - dif * rot_angf)
+        xf_prime = float(xf - yf * di * 2.0**(-i))
+        yf_prime = float(yf + xf * di * 2.0**(-i))
+        zf_prime = float(zf - di * rot_angf)
         
         #verification table - check that the iteration is correct
         #print(i, 2.0**(-i), rot_ang, z, rot_ang, z_prime)
@@ -121,7 +120,7 @@ def cordic_itr(ang, n):
     cos_mpfr = bf.cos(deg_to_rad(ang), bf.precision(PREC))
     sin_mpfr = bf.sin(deg_to_rad(ang), bf.precision(PREC))
     tan_mpfr = bf.tan(deg_to_rad(ang), bf.precision(PREC))
-    
+     
     cos_diff = (cos_mpfr-cos_p) / cos_mpfr
     sin_diff = (sin_mpfr-sin_p) / sin_mpfr
     tan_diff = (tan_mpfr-tan_p) / tan_mpfr
@@ -131,10 +130,19 @@ def cordic_itr(ang, n):
     sin_mlib = float(math.sin(ang))
     tan_mlib = float(math.tan(ang))
     
-    cos_fdiff = (cos_mlib-xf) / cos_mlib
-    sin_fdiff = (sin_mlib-yf) / sin_mlib
-    tan_fdiff = (tan_mlib-yf/xf) / tan_mlib
-
+    try:
+        cos_fdiff = (cos_mlib-xf) / cos_mlib
+    except ZeroDivisionError:
+        cos_fdiff = float('Inf')
+    try:
+        sin_fdiff = (sin_mlib-yf) / sin_mlib
+    except ZeroDivisionError:
+        sin_fdiff = float('Inf')
+    try:
+        tan_fdiff = (tan_mlib-yf/xf) / tan_mlib
+    except ZeroDivisionError:
+        tan_fdiff = float('Inf')
+        
 
     arr1 = [ang,
             #posit
