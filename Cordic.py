@@ -66,6 +66,7 @@ def cordic_itr(ang, n):
     zf = float(ang)
     xf = float(1.0 / val_Anf(n))
     yf = float(0.0)
+    dif
     arctan_tablef = atan_tablef(n)
     
     #iterate cordic algorithm
@@ -76,13 +77,13 @@ def cordic_itr(ang, n):
             di = 1
         else:
             di = -1
-        
+
         x_prime = x - y * di * 2**(-i)
         y_prime = y + x * di * 2**(-i)
         z_prime = z - di * rot_ang
-        xf_prime = float(xf - yf * di * 2.0**(-i))
-        yf_prime = float(yf + xf * di * 2.0**(-i))
-        zf_prime = float(zf - di * rot_angf)
+        xf_prime = float(xf - yf * dif * 2.0**(-i))
+        yf_prime = float(yf + xf * dif * 2.0**(-i))
+        zf_prime = float(zf - dif * rot_angf)
         
         #verification table - check that the iteration is correct
         #print(i, 2.0**(-i), rot_ang, z, rot_ang, z_prime)
@@ -127,8 +128,8 @@ def cordic_itr(ang, n):
      
     #float and mathlib output vars
     cos_mlib = float(math.cos(ang))
-    sin_mlib = float(math.cos(ang))
-    tan_mlib = float(math.cos(ang))
+    sin_mlib = float(math.sin(ang))
+    tan_mlib = float(math.tan(ang))
     
     cos_fdiff = (cos_mlib-xf) / cos_mlib
     sin_fdiff = (sin_mlib-yf) / sin_mlib
@@ -147,13 +148,13 @@ def cordic_itr(ang, n):
             
     arr2 = [ang,
             #posit
-            "%.40E" %y, "%.40E" %sin_mpfr ,"%.40E" %sin_diff, "%.40E" %x,
-            "%.40E" %cos_mpfr, "%.40E" %cos_diff,
-            "%.40E" %(y/x), "%.40E" %tan_mpfr, "%.40E" %tan_diff, 
+            "%.20E" %y, "%.20E" %sin_mpfr ,"%.20E" %sin_diff, "%.20E" %x,
+            "%.20E" %cos_mpfr, "%.20E" %cos_diff,
+            "%.20E" %(y/x), "%.20E" %tan_mpfr, "%.20E" %tan_diff, 
             #float 
-            "%.40E" %yf, "%.40E" %sin_mlib ,"%.40E" %sin_fdiff, "%.40E" %xf,
-            "%.40E" %cos_mlib, "%.40E" %cos_fdiff,
-            "%.40E" %(yf/xf), "%.40E" %tan_mlib, "%.40E" %tan_fdiff] 
+            "%.20E" %yf, "%.20E" %sin_mlib ,"%.20E" %sin_fdiff, "%.20E" %xf,
+            "%.20E" %cos_mlib, "%.20E" %cos_fdiff,
+            "%.20E" %(yf/xf), "%.20E" %tan_mlib, "%.20E" %tan_fdiff] 
 
     with open('posit.csv', 'a') as f:
         csvfile = csv.writer(f)
