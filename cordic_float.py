@@ -57,11 +57,12 @@ def cordic_itr(ang, n):
     print("cos of %d (in degrees) = " %ang, x)
     print("sin of %d (in degrees) = " %ang, y)
     print("tan of %d (in degrees) = "%ang, y/x)
+    print("%.13f" %y)
     
     print("\nMathlib representation:")
-    print("cos of %d (in degrees) = " %ang, math.cos(math.pi/9))
-    print("sin of %d (in degrees) = " %ang, math.sin(math.pi/9))
-    print("tan of %d (in degrees) = " %ang, math.tan(math.pi/9))
+    print("cos of %d (in degrees) = " %ang, math.cos(math.pi/6))
+    print("sin of %d (in degrees) = " %ang, math.sin(math.pi/6))
+    print("tan of %d (in degrees) = " %ang, math.tan(math.pi/6))
 
     #verify angle is correct
     print("angle = ", math.degrees(math.atan(y/x)))
@@ -70,7 +71,7 @@ def cordic_itr(ang, n):
 ##### TEST #####
 
 if __name__ == '__main__':
-    cordic_itr(i, 45)
+    cordic_itr(30, 45)
 
     #for i in range(361):
     #    cordic_itr(i, 45)

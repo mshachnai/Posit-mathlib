@@ -15,11 +15,20 @@ def val_Ki(n):
     Ki =  sp.posit32(1 / math.sqrt(1 + 2**(-2*n)))
     return Ki
 
-#function to return value of An (cordic gain) 
+#function to return value of An (cordic gain) for trig functions 
 def val_An(n):
     An = math.sqrt(2)
     for i in range (1, n):
         An = An * math.sqrt(1 + 2**(-2*i))
+    return An
+
+#function to return value of An (cordic gain) for hyperbolic functions 
+def val_hyp_An(n):
+    An = math.sqrt(.75)
+    print(An)
+    for i in range (2, n):
+        An = An * math.sqrt(1 - 2**(-2*sigma_hyper(i)))
+    print(An)
     return An
 
 #function to return a dictionary (tan:arctan) of arctan values 
@@ -29,7 +38,28 @@ def atan_table(n):
         table[2**(-i)] = sp.posit32(math.degrees(math.atan(2**(-i))))
     return table
 
-#function for computing the cordic iteration
+#function to return a dictionary of arctanh values 
+def atanh_table(n):
+    table = {}
+    for i in range(n+1):
+        table[2**(-sigma_hyper(i))] = sp.posit32(math.atanh(2**(-sigma_hyper(i))))
+    return table
+
+#function to compute sigma(n) = n-k where k is largest int s.t. 3**(k+1)+2k-1 <= 2n for hyperbolic functions
+def sigma_hyper(n):
+    k = -1
+    sig = k
+    done = 0
+    while (3**(k+1) + 2*k - 1 <= 2*n):
+        sig = k
+        k += 1
+    
+    k = sig
+    #print(n-sig)
+    return n-k
+
+
+#function for computing the cordic iteration for trig functions
 def cordic_itr(ang, n):
     z = sp.posit32(ang)
     x = sp.posit32(1 / val_An(n))
@@ -55,6 +85,7 @@ def cordic_itr(ang, n):
         x = x_prime
         y = y_prime
         z = z_prime
+    
     
     print("\nPosit representation:")
     print("cos of %d (in degrees) = %.30f" %(ang, x))
@@ -94,6 +125,7 @@ def cordic_itr(ang, n):
     #verify angle is correct
     #print("angle = ", math.degrees(math.atan(y/x)))
     
+    """ 
     arr1 = [ang, "%.100f" %y, "%.100f" %sin_mpfr ,"%.100f" %sin_diff, "%.100f" %x,
             "%.100f" %cos_mpfr, "%.100f" %cos_diff,
             "%.100f" %(y/x), "%.100f" %tan_mpfr, "%.100f" %tan_diff] 
@@ -115,11 +147,65 @@ def cordic_itr(ang, n):
     with open('posit_Expform.csv', 'a') as f1:
         csvfile = csv.writer(f1)
         csvfile.writerow(arr2)
+    """
+
+
+#function for computing the cordic iteration for hyperbolic functions
+def cordic_hyp_itr(ang, n):
+    z = sp.posit32(ang)
+    x = sp.posit32(1 / val_hyp_An(n))
+    print(x)
+    y = sp.posit32(0.0)
+    di = 0
+    arctanh_table = atanh_table(n)
+   
+    #iterate cordic algorithm
+    for i in range(1,n+1):
+        rot_ang = arctanh_table[2**(-sigma_hyper(i))]
+        if z >= 0:
+            di = 1
+        else:
+            di = -1
+        
+        x_prime = x + y * di * 2**(-sigma_hyper(i))
+        y_prime = y + x * di * 2**(-sigma_hyper(i))
+        z_prime = z - di * rot_ang
+        
+        #verification table - check that the iteration is correct
+        print(i, 2.0**(-sigma_hyper(i)), rot_ang, z, rot_ang, z_prime)
+
+        x = x_prime
+        y = y_prime
+        z = z_prime
+    
+    
+    print("\nPosit representation:")
+    print("cosh of %d (in degrees) = %.30f" %(ang, x))
+    print("sinh of %d (in degrees) = %.30f" %(ang, y))
+    print("tanh of %d (in degrees) = %.30f" %(ang, y/x))
+    print("exp(%d) = %.30f" %(ang, x+y))
+    print("ln(%d)  = %.30f" %(ang, 2*math.atanh((ang-1)/(ang+1))))
+
+    print("\nMathlib representation:")
+    print("cosh of %d (in degrees) = %.30f" %(ang, math.cosh(ang)))
+    print("sinh of %d (in degrees) = %.30f" %(ang, math.sinh(ang)))
+    print("tanh of %d (in degrees) = %.30f" %(ang, math.tanh(ang)))
+    print("exp(%d) = %.30f" %(ang, math.exp(ang)))
+    print("ln(%d) = %.30f" %(ang, math.log(ang)))
+
+    print("\nMPFR representation:")
+    print("cosh of %d (in degrees) = " %ang, bf.cosh(ang, bf.precision(PREC)))
+    print("sinh of %d (in degrees) = " %ang, bf.sinh(ang, bf.precision(PREC)))
+    print("tanh of %d (in degrees) = " %ang, bf.tanh(ang, bf.precision(PREC)))
+
+
+
 
 
 ##### Main Program #####
 
 if __name__ == '__main__':
+    """
     fields = ['Angle', 'Posit-sin', 'MPFR-sin', 'Error', 'Posit-cos', 'MPFR-cos',
             'Error', 'Posit-tan',  'MPFR-tan','Error']
     #'Float-sin', 'Error', 'Float-cos', 'Error', 'Float-tan', 'Error', 
@@ -135,9 +221,12 @@ if __name__ == '__main__':
 
     for i in range(361):
         cordic_itr(i, 45)
-
+    
     f.close()
+    """
 
-
+    #cordic_itr(30, 45)
+    cordic_hyp_itr(0.4, 40)
+    #sigma_hyper(1)
 
 
