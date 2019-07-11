@@ -1,7 +1,8 @@
 import math
 import numpy as np
-
-
+import softposit as sp
+import bigfloat as bf
+PREC = 200
 
 
 def angle_shift( alpha, beta ):
@@ -49,7 +50,7 @@ def angle_shift( alpha, beta ):
 
 
 
-def sin_cordic ( beta, n ):
+def sincos_cordic ( beta, n ):
 
 #*****************************************************************************80
 #
@@ -246,11 +247,19 @@ def sin_cordic ( beta, n ):
 
   return v
 
-cos,sin = sin_cordic(math.pi/9, 40)
+cos,sin = sincos_cordic(math.pi/9, 40)
 cos_mlib = math.cos(math.pi/9)
 sin_mlib = math.sin(math.pi/9)
 
-print("%.20f, %.20f" %(cos, sin) )
-print("%.20f, %.20f" %(cos_mlib, sin_mlib) )
-print("%.20f, %.20f" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
-print("%.40E, %.40E" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
+cos_mpfr = bf.cos(math.pi/9, bf.precision(PREC))
+sin_mpfr = bf.sin(math.pi/9, bf.precision(PREC))
+tan_mpfr = bf.tan(math.pi/9, bf.precision(PREC))
+
+print("FLOAT")
+print("cos: %.20f, sin: %.20f" %(cos, sin) )
+print("cos_mlib: %.20f, sin_mlib %.20f" %(cos_mlib, sin_mlib) )
+print("cos_mpfr: %.20f, sin_mpfr %.20f" %(cos_mpfr, sin_mpfr) )
+print("diff mlib %.20f, %.20f" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
+print("diff mlib %.40E, %.40E" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
+print("diff mpfr %.20f, %.20f" %((cos_mpfr-cos)/cos_mpfr, (sin_mpfr-sin)/sin_mpfr) )
+print("diff mpfr %.40E, %.40E" %((cos_mpfr-cos)/cos_mpfr, (sin_mpfr-sin)/sin_mpfr) )

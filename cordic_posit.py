@@ -4,7 +4,7 @@ import math
 import csv
 import softposit as sp
 import bigfloat as bf
-PREC = 1000
+PREC = 200
 
 #function to convert degrees to radians
 def deg_to_rad(angle):
@@ -153,7 +153,7 @@ def cordic_itr(ang, n):
 #function for computing the cordic iteration for hyperbolic functions
 def cordic_hyp_itr(ang, n):
     z = sp.posit32(ang)
-    x = sp.posit32(1 / val_hyp_An(n))
+    x = sp.posit32(1.0 / val_hyp_An(n))
     print(x)
     y = sp.posit32(0.0)
     di = 0
@@ -184,14 +184,15 @@ def cordic_hyp_itr(ang, n):
     print("sinh of %d (in degrees) = %.30f" %(ang, y))
     print("tanh of %d (in degrees) = %.30f" %(ang, y/x))
     print("exp(%d) = %.30f" %(ang, x+y))
-    print("ln(%d)  = %.30f" %(ang, 2*math.atanh((ang-1)/(ang+1))))
+    #val = (ang-1.0)/(ang+1.0)
+    #print("ln(%d)  = %.30f" %(ang, 2*math.atanh((ang-1.0)/(ang+1.0))))
 
     print("\nMathlib representation:")
     print("cosh of %d (in degrees) = %.30f" %(ang, math.cosh(ang)))
     print("sinh of %d (in degrees) = %.30f" %(ang, math.sinh(ang)))
     print("tanh of %d (in degrees) = %.30f" %(ang, math.tanh(ang)))
     print("exp(%d) = %.30f" %(ang, math.exp(ang)))
-    print("ln(%d) = %.30f" %(ang, math.log(ang)))
+    #print("ln(%d) = %.30f" %(ang, math.log(ang)))
 
     print("\nMPFR representation:")
     print("cosh of %d (in degrees) = " %ang, bf.cosh(ang, bf.precision(PREC)))
@@ -226,7 +227,7 @@ if __name__ == '__main__':
     """
 
     #cordic_itr(30, 45)
-    cordic_hyp_itr(0.4, 40)
+    cordic_hyp_itr(1.11, 60)
     #sigma_hyper(1)
 
 
