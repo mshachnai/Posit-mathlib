@@ -1,4 +1,4 @@
-Angle, Float-sin, Mathlib-sin, Error, Float-cos, Mathlib-cos, Error, Float-tan, Mathlib-tan, Error 
+Angle, Posit-sin, Mathlib-sin, Error, Posit-cos, Mathlib-cos, Error, Posit-tan, Mathlib-tan, Error 
 0,1.065018e-09,0.000000e+00,nan,1.000000e+00,1.000000e+00,-1.490116e-08,1.065018e-09,0.000000e+00,nan
 1,1.745241e-02,1.745241e-02,-1.067271e-07,9.998477e-01,9.998477e-01,3.725857e-09,1.745507e-02,1.745507e-02,-1.333886e-08
 2,3.489950e-02,3.489950e-02,-8.005753e-08,9.993908e-01,9.993908e-01,-3.727560e-09,3.492077e-02,3.492077e-02,0.000000e+00
