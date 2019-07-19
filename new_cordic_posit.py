@@ -1,3 +1,6 @@
+#Implementation of CORDIC using POSIT
+
+import csv
 import math
 import numpy as np
 import softposit as sp
@@ -87,7 +90,7 @@ def sincos_cordic ( beta, n ):
 #    Local, real KPROD(33), KPROD(j) = product ( 0 <= i <= j ) K(i),
 #    K(i) = 1 / sqrt ( 1 + (1/2)^(2i) ).
 #
-  
+
   angles = np.array ( [ \
     7.8539816339744830962E-01, \
     4.6364760900080611621E-01, \
@@ -187,7 +190,7 @@ def sincos_cordic ( beta, n ):
 #
 #  Shift angle to interval [-pi,pi].
 #
-  theta = angle_shift ( beta, - np.pi )
+  theta = sp.posit32(angle_shift ( beta, - np.pi ))
 #
 #  Shift angle to interval [-pi/2,pi/2] and account for signs.
 #
@@ -202,7 +205,7 @@ def sincos_cordic ( beta, n ):
 
   v = np.array ( [ 1.0, 0.0 ] )
   poweroftwo = 1.0
-  angle = angles[0]
+  angle = sp.posit32(angles[0])
 
   for j in range ( 0, n ):
 
@@ -228,9 +231,9 @@ def sincos_cordic ( beta, n ):
 #  Update the angle from table, or eventually by just dividing by two.
 #
     if ( angles.size <= ( j + 1 ) ):
-      angle = angle / 2.0
+      angle = sp.posit32(angle / 2.0)
     else:
-      angle = angles[j+1]
+      angle = sp.posit32(angles[j+1])
 #
 #  Adjust length of output vector to be [cos(beta), sin(beta)]:
 #
@@ -244,22 +247,74 @@ def sincos_cordic ( beta, n ):
 #  not in quadrant 1 or 4.
 #
   v = sign_factor * v
+  x, y = sp.posit32(v[0]), sp.posit32(v[1])
 
-  return v
+  ang = float(beta * 180.0/math.pi)
 
-cos,sin = sincos_cordic(math.pi/9, 40)
-cos_mlib = math.cos(math.pi/9)
-sin_mlib = math.sin(math.pi/9)
+  #posit and mpfr output vars
+  swapx = float(x) 
+  swapy = float(y) 
+  swaptan = float(y/x) 
+  cos_p = bf.BigFloat.exact(swapx)
+  sin_p = bf.BigFloat.exact(swapy)
+  tan_p = bf.BigFloat.exact(swaptan)
 
-cos_mpfr = bf.cos(math.pi/9, bf.precision(PREC))
-sin_mpfr = bf.sin(math.pi/9, bf.precision(PREC))
-tan_mpfr = bf.tan(math.pi/9, bf.precision(PREC))
+  cos_mpfr = bf.cos(beta, bf.precision(PREC))
+  sin_mpfr = bf.sin(beta, bf.precision(PREC))
+  tan_mpfr = bf.tan(beta, bf.precision(PREC))
+   
+  cos_diff = (cos_mpfr-cos_p) / cos_mpfr
+  sin_diff = (sin_mpfr-sin_p) / sin_mpfr
+  tan_diff = (tan_mpfr-tan_p) / tan_mpfr
+   
+  #float and mathlib output vars
+  cos_mlib = float(math.cos(ang))
+  sin_mlib = float(math.sin(ang))
+  tan_mlib = float(math.tan(ang))
+ 
+  """
+  try:
+      cos_fdiff = (cos_mlib-xf) / cos_mlib
+  except ZeroDivisionError:
+      cos_fdiff = float('Inf')
+  try:
+      sin_fdiff = (sin_mlib-yf) / sin_mlib
+  except ZeroDivisionError:
+      sin_fdiff = float('Inf')
+  try:
+      tan_fdiff = (tan_mlib-yf/xf) / tan_mlib
+  except ZeroDivisionError:
+      tan_fdiff = float('Inf')
+  """
 
-print("FLOAT")
-print("cos: %.20f, sin: %.20f" %(cos, sin) )
-print("cos_mlib: %.20f, sin_mlib %.20f" %(cos_mlib, sin_mlib) )
-print("cos_mpfr: %.20f, sin_mpfr %.20f" %(cos_mpfr, sin_mpfr) )
-print("diff mlib %.20f, %.20f" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
-print("diff mlib %.40E, %.40E" %((cos_mlib-cos)/cos_mlib, (sin_mlib-sin)/sin_mlib) )
-print("diff mpfr %.20f, %.20f" %((cos_mpfr-cos)/cos_mpfr, (sin_mpfr-sin)/sin_mpfr) )
-print("diff mpfr %.40E, %.40E" %((cos_mpfr-cos)/cos_mpfr, (sin_mpfr-sin)/sin_mpfr) )
+  #output results to file
+  arr1 = [int(ang+0.1),
+            #posit
+            "%.5E" %y, "%.5E" %sin_mpfr ,"%.5E" %sin_diff, "%.5E" %x,
+            "%.5E" %cos_mpfr, "%.5E" %cos_diff,
+            "%.5E" %(y/x), "%.5E" %tan_mpfr, "%.5E" %tan_diff] 
+
+  with open('posit_new_cordic_py.csv', 'a') as f:
+        csvfile = csv.writer(f)
+        csvfile.writerow(arr1)
+
+
+if __name__ == '__main__':
+    fields = ['Angle',
+            #posit
+            'Posit-sin', 'MPFR-sin', 'Error', 'Posit-cos', 'MPFR-cos','Error',
+            'Posit-tan', 'MPFR-tan', 'Error']
+
+    with open('posit_new_cordic_py.csv', 'w') as f:
+            csvfile = csv.writer(f)
+            csvfile.writerow(fields)
+
+    for i in range(361):
+        theta = i * math.pi/180.0
+        sincos_cordic(theta, 40)
+        
+
+    f.close()
+
+
+

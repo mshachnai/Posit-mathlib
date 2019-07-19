@@ -338,6 +338,7 @@ void cossin_cordic ( float beta, int n, float &c, float &s, ofstream& file)
 
     float x = c;
     float y = s;
+    
     //mathlib trig functions
     double sin_mathlib = sin(beta);
     double cos_mathlib = cos(beta);
@@ -345,12 +346,11 @@ void cossin_cordic ( float beta, int n, float &c, float &s, ofstream& file)
     double s_err = (sin_mathlib - y) / sin_mathlib;
     double c_err = (cos_mathlib - x) / cos_mathlib;
     double t_err = (tan_mathlib - y/x) / tan_mathlib;
-
-
+    
     //output results to csv file
-    file << int(beta) << scientific << ',' << y << ',' << sin_mathlib << ',' << s_err 
-        << ',' << x << ','<< cos_mathlib << ',' << c_err << ',' << y/x << ',' 
-        << tan_mathlib << ',' << t_err << '\n'; 
+    file << int(beta* 180.0/M_PI + 0.1) << scientific << ',' << y << ',' << sin_mathlib <<
+    ',' << s_err  << ',' << x << ','<< cos_mathlib << ',' << c_err << ',' << y/x << ',' 
+    << tan_mathlib << ',' << t_err << '\n'; 
 
 	return;
 # undef ANGLES_LENGTH
