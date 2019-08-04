@@ -21,7 +21,7 @@ posit32 Rough_sqrt_est_posit(int S){
     int exp = 0;
 
     for (i = 0; i < 100; i++){
-        if (num / 10 == 0){
+        if (round(num) / 10 == 0){
             i++;
             break;
         }
@@ -54,7 +54,7 @@ posit32 Rough_sqrt_est_posit(int S){
         output = 6 * pow(10, exp/2);
     }
 
-    cout << output << endl;
+    cout << "sqrt estimation = " << output << endl;
     return output;
 
 }
@@ -68,7 +68,7 @@ float Rough_sqrt_est_float(int S){
     int exp = 0;
 
     for (i = 0; i < 100; i++){
-        if (num / 10 == 0){
+        if (int(num) / 10 == 0){
             i++;
             break;
         }
@@ -105,9 +105,53 @@ float Rough_sqrt_est_float(int S){
     return output;
 
 }
+
+posit32 Babylonian_sqrt_posit(int S){
+    posit32 x = Rough_sqrt_est_posit(S);
+    posit32 x_prime = 0;
+    int i = 0;
+    int iter = 5;
+
+    //iterate babylonian method
+    for (i = 0; i < iter; i++){
+        x_prime = 0.5 * (x + (S / x));
+        cout << x << " " << x_prime << endl;
+        x = x_prime;
+    }
+
+    posit32 output = x_prime;
+     
+
+    return output;
+}
+
+float Babylonian_sqrt_float(int S){
+    float x = Rough_sqrt_est_float(S);
+    float x_prime = 0;
+    int i = 0;
+    int iter = 5;
+
+    //iterate babylonian method
+    for (i = 0; i < iter; i++){
+        x_prime = 0.5 * (x + (S / x));
+        //cout << x << " " << x_prime << endl;
+        x = x_prime;
+    }
+
+    float output = x_prime;
+     
+
+    return output;
+}
+
+
+
 int main(int argc, char **argv){
     
-    Rough_sqrt_est_posit(10);
-    Rough_sqrt_est_float(10);
+    //Rough_sqrt_est_posit(125348);
+    //Rough_sqrt_est_float(10);
+    
+    Babylonian_sqrt_posit(125348);
+    Babylonian_sqrt_float(125348);
     return 0;
 }
