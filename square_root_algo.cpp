@@ -112,17 +112,13 @@ posit32 Babylonian_sqrt_posit(int S){
     int i = 0;
     int iter = 5;
 
-    //iterate babylonian method
     for (i = 0; i < iter; i++){
         x_prime = 0.5 * (x + (S / x));
         cout << x << " " << x_prime << endl;
         x = x_prime;
     }
 
-    posit32 output = x_prime;
-     
-
-    return output;
+    return x_prime;
 }
 
 float Babylonian_sqrt_float(int S){
@@ -131,19 +127,53 @@ float Babylonian_sqrt_float(int S){
     int i = 0;
     int iter = 5;
 
-    //iterate babylonian method
     for (i = 0; i < iter; i++){
         x_prime = 0.5 * (x + (S / x));
         //cout << x << " " << x_prime << endl;
         x = x_prime;
     }
 
-    float output = x_prime;
-     
-
-    return output;
+    return x_prime;
 }
 
+
+posit32 Bakhshali_sqrt_posit(int S){
+    posit32 x = Rough_sqrt_est_posit(S);
+    posit32 x_prime = 0;
+    posit32 a = 0;
+    posit32 b = 0;
+    int i = 0;
+    int iter = 5;
+
+    for (i = 0; i < iter; i++){
+        a = (S - (x*x)) / (2 * x);
+        b = x + a;
+        x_prime = b - (a*a) / (2 * b); 
+        //cout << a << " " << b << " " << x_prime << endl;
+        x = x_prime;
+    }
+
+    return x_prime;
+}
+
+float Bakhshali_sqrt_float(int S){
+    float x = Rough_sqrt_est_float(S);
+    float x_prime = 0;
+    float a = 0;
+    float b = 0;
+    int i = 0;
+    int iter = 5;
+
+    for (i = 0; i < iter; i++){
+        a = (S - (x*x)) / (2 * x);
+        b = x + a;
+        x_prime = b - (a*a) / (2 * b); 
+        cout << a << " " << b << " " << x_prime << endl;
+        x = x_prime;
+    }
+
+    return x_prime;
+}
 
 
 int main(int argc, char **argv){
@@ -151,7 +181,10 @@ int main(int argc, char **argv){
     //Rough_sqrt_est_posit(125348);
     //Rough_sqrt_est_float(10);
     
-    Babylonian_sqrt_posit(125348);
-    Babylonian_sqrt_float(125348);
+    //Babylonian_sqrt_posit(125348);
+    //Babylonian_sqrt_float(125348);
+
+    //Bakhshali_sqrt_posit(125348);
+    //Bakhshali_sqrt_float(125348);
     return 0;
 }
